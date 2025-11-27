@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[pre-push] Exécution de make test..."
+
+if make test; then
+  echo "[pre-push] Tests réussis, push autorisé."
+  exit 0
+else
+  echo "[pre-push] Tests échoués, push annulé."
+  exit 1
+fi
+

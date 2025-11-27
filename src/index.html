@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>OptiWeb Tauri + Vite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Demo Tauri + Vite</h1>
+      <p>Somme de deux entiers via commande Tauri <code>add(a, b)</code>.</p>
+      <form id="add-form">
+        <label>
+          a:
+          <input id="input-a" type="number" value="1" />
+        </label>
+        <label>
+          b:
+          <input id="input-b" type="number" value="2" />
+        </label>
+        <button type="submit">Calculer</button>
+      </form>
+      <p id="result"></p>
+      <p id="error" class="error"></p>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
