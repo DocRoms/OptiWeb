@@ -3,11 +3,15 @@ SERVICE := app
 CONTAINER_FRONT_DIR := /app
 CONTAINER_TAURI_DIR := /app/src-tauri
 
-.PHONY: install start stop test-front test-back test docker-up docker-down shell dev
+.PHONY: install start stop test-front test-back test docker-up docker-down shell dev git-hooks
 
 # Build de l'image et démarrage du service, puis installation des deps dans le volume monté
-install: docker-up
+install: docker-up git-hooks
 	$(DOCKER_COMPOSE) exec $(SERVICE) bash -c "cd $(CONTAINER_FRONT_DIR) && npm install && cd $(CONTAINER_TAURI_DIR) && cargo fetch || true"
+
+# Configure les hooks git pour utiliser .githooks (dans ce dépôt uniquement)
+git-hooks:
+	@git config core.hooksPath .githooks
 
 # Démarrer Tauri dans Docker avec X11 forwarding (WSLg)
 start: docker-up

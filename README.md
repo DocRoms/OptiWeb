@@ -2,13 +2,13 @@
 
 Projet exemple Tauri (Rust) + Vite (HTML/CSS/TypeScript **sans framework UI**), avec tests (Rust + Vitest), Docker, Makefile et hook git `pre-push`.
 
-**✅ Tout est dockerisé** : Ce projet utilise X11 forwarding via WSLg pour afficher Tauri depuis Docker sous un écran Windows.
+**✅ Tout est dockerisé** : Ce projet utilise X11 forwarding via WSLg pour afficher Tauri depuis Docker sur un écran Windows.
 
 ## Prérequis
 
 - **Docker** et **docker compose**
 - **WSL2** avec **WSLg** (inclus par défaut dans les versions récentes de WSL2)
-- Aucune installation de Rust/Node nécessaire sur la machine !
+- Aucune installation de Rust/Node nécessaire sur la machine hôte !
 
 ## Installation
 
@@ -151,24 +151,22 @@ Les principales cibles disponibles (tout dans Docker) :
 
 ## Hook git `pre-push`
 
-Un hook `pre-push` est fourni dans `scripts/pre-push`.
+Un hook `pre-push` est fourni dans le dossier versionné `.githooks/`.
 
-### Installation du hook
+- Il exécute `make test` avant chaque `git push`.
+- Si les tests échouent, le push est annulé.
+
+La configuration des hooks est faite automatiquement par `make install` via :
 
 ```sh
-chmod +x scripts/pre-push scripts/install-hooks.sh
-./scripts/install-hooks.sh
+git config core.hooksPath .githooks
 ```
 
-Ce script :
-- Copie `scripts/pre-push` dans `.git/hooks/pre-push`.
-- Rend le hook exécutable.
+Tu n'as donc **rien à faire manuellement** pour activer le hook, à part lancer une fois :
 
-### Comportement
-
-À chaque `git push` :
-- Le hook exécute `make test` **via Docker**.
-- Si les tests échouent, le push est bloqué (code de sortie non nul).
+```sh
+make install
+```
 
 ## Commande Tauri exposée au front
 
@@ -196,8 +194,8 @@ Le résultat est affiché dans l'interface (cf. `src/main.ts`).
 - `src/` : front-end Vite (HTML/CSS/TS), avec `index.html`, `main.ts`, `style.css`.
 - `src-tauri/` : backend Rust/Tauri (commande `add`, config `tauri.conf.json`).
 - `tests/` : tests TypeScript (Vitest), ex : `tests/add.spec.ts`.
+- `.githooks/` : hooks Git versionnés (dont `pre-push`).
 - `docker/` : Dockerfile de dev.
-- `scripts/` : scripts utilitaires (dont hook git).
 - `Makefile` : commandes de build/dev/tests.
 - `docker-compose.yml` : configuration docker compose (service `app`, port 5173 exposé, X11/WSLg).
 - `package.json` : configuration front (Vite, TypeScript, Vitest).
